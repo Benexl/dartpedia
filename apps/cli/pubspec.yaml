@@ -1,0 +1,19 @@
+name: dartpedia
+description: A sample command-line application.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.10.1
+
+# Add regular dependencies here.
+dependencies:
+  path: ^1.9.0
+  arg_parse: ^1.0.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
+executables:
+  dartpedia: cli
+resolution: workspace

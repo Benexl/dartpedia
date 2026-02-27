@@ -1,0 +1,11 @@
+name: dartpedia_workspace
+environment:
+  sdk: ">=3.10.1 <4.0.0"
+dev_dependencies:
+  melos: ^7.4.0
+workspace:
+  - packages/arg_parse
+  - packages/console
+  - packages/wikipedia
+  - apps/cli
+melos:
