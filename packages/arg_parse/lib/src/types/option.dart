@@ -22,7 +22,7 @@ class ValueOption extends Option {
   });
   @override
   String get help =>
-      "$name${abbr != null ? ", $abbr" : ""} <$valueType ${allowMultiple ? "..." : ""}>: $description";
+      "$name${abbr != null ? ", $abbr" : ""} <$valueType${allowMultiple ? " ..." : ""}>: $description";
 }
 
 class FlagOption extends Option {
