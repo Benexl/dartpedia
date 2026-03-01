@@ -1,4 +1,6 @@
 import 'package:arg_parse/arg_parse.dart';
+import 'utils/themes.dart';
+import 'package:console/console.dart';
 
 import 'command/cache.dart';
 import 'command/download.dart';
@@ -7,6 +9,7 @@ import 'command/history.dart';
 import 'command/search.dart';
 
 void run(List<String> arguments) {
+  final console = Console(AppTheme.arcticPetrol.theme);
   try {
     ArgParse parser = ArgParse(arguments);
     parser.parse(
@@ -16,12 +19,21 @@ void run(List<String> arguments) {
         (Command cmd, Context ctx) {
           FlagOption version = cmd.options[0] as FlagOption;
           FlagOption help = cmd.options[1] as FlagOption;
+
           if (version.value) {
-            print("Dartpedia v1.0.0 Copyright © 2024 Benexl projects");
+            console.print(
+              Card([Text("Dartpedia v1.0.0 Copyright © 2024 Benexl projects")]),
+            );
           } else if (help.value) {
-            print(cmd.help);
+            console.print(Card([Text(cmd.help)]));
           } else {
-            print("No command provided. Use --help for usage information.");
+            console.print(
+              Card([
+                Text("Dartpedia", bold: true),
+                Text("Browse Wikipedia from your terminal"),
+                Text("Run dartpedia --help for usage information"),
+              ]),
+            );
           }
         },
         options: [
@@ -32,7 +44,7 @@ void run(List<String> arguments) {
           Command(
             "search",
             "Search for stuff on wikipedia",
-            searchCommand,
+            (cmd, ctx) => searchCommand(cmd, ctx, console),
             allowValues: true,
             options: [
               ValueOption(
@@ -47,13 +59,13 @@ void run(List<String> arguments) {
           Command(
             "help",
             "Get help / usage on any command",
-            helpCommand,
+            (cmd, ctx) => helpCommand(cmd, ctx, console),
             allowValues: true,
           ),
           Command(
             "cache",
             "Manage the dartpedia cache",
-            cacheCommand,
+            (cmd, ctx) => cacheCommand(cmd, ctx, console),
             options: [FlagOption("help", "Show help information", abbr: "h")],
             subCommands: [
               Command("clear", "Clear all cached content", cacheClearCommand),
@@ -63,7 +75,7 @@ void run(List<String> arguments) {
           Command(
             "download",
             "Download content from wikipedia",
-            downloadCommand,
+            (cmd, ctx) => downloadCommand(cmd, ctx, console),
             allowValues: true,
             options: [
               ValueOption("output", "Output file path", abbr: "o"),
@@ -79,7 +91,7 @@ void run(List<String> arguments) {
           Command(
             "history",
             "Show command history",
-            historyCommand,
+            (cmd, ctx) => historyCommand(cmd, ctx, console),
             options: [
               FlagOption("clear", "Clear the history", abbr: "c"),
               ValueOption(
@@ -96,6 +108,6 @@ void run(List<String> arguments) {
     );
     parser.run();
   } catch (e) {
-    print("$e");
+    console.print(Card([Text("Error: $e")]));
   }
 }

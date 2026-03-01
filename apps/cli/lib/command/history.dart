@@ -1,9 +1,10 @@
 import 'package:arg_parse/arg_parse.dart';
+import 'package:console/console.dart';
 
-void historyCommand(Command cmd, Context ctx) {
+void historyCommand(Command cmd, Context ctx, Console console) {
   FlagOption help = cmd.options[2] as FlagOption;
   if (help.value) {
-    print(cmd.help);
+    console.print(Card([Text(cmd.help)]));
     return;
   }
 

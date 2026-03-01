@@ -1,9 +1,10 @@
 import 'package:arg_parse/arg_parse.dart';
+import 'package:console/console.dart';
 
-void downloadCommand(Command cmd, Context ctx) {
+void downloadCommand(Command cmd, Context ctx, Console console) {
   FlagOption help = cmd.options[2] as FlagOption;
   if (help.value) {
-    print(cmd.help);
+    console.print(Card([Text(cmd.help)]));
     return;
   }
 
@@ -12,7 +13,9 @@ void downloadCommand(Command cmd, Context ctx) {
   final article = cmd.values.join(" ");
 
   if (article.isEmpty) {
-    print("No article specified. Use --help for usage information.");
+    console.print(
+      Card([Text("No article specified. Use --help for usage information.")]),
+    );
     return;
   }
 

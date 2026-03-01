@@ -1,9 +1,10 @@
 import 'package:arg_parse/arg_parse.dart';
+import 'package:console/console.dart';
 
-void searchCommand(Command cmd, Context ctx) {
+void searchCommand(Command cmd, Context ctx, Console console) {
   FlagOption help = cmd.options[1] as FlagOption;
   if (help.value) {
-    print(cmd.help);
+    console.print(Card([Text(cmd.help)]));
     return;
   }
 
@@ -11,7 +12,11 @@ void searchCommand(Command cmd, Context ctx) {
   final query = cmd.values.join(" ");
 
   if (query.isEmpty) {
-    print("No search query provided. Use --help for usage information.");
+    console.print(
+      Card([
+        Text("No search query provided. Use --help for usage information."),
+      ]),
+    );
     return;
   }
 
