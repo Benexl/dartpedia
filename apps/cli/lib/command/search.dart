@@ -1,7 +1,8 @@
 import 'package:arg_parse/arg_parse.dart';
 import 'package:console/console.dart';
+import 'package:wikipedia/wikipedia.dart';
 
-void searchCommand(Command cmd, Context ctx, Console console) {
+void searchCommand(Command cmd, Context ctx, Console console) async {
   FlagOption help = cmd.options[1] as FlagOption;
   if (help.value) {
     console.print(Card([Text(cmd.help)]));
@@ -20,5 +21,18 @@ void searchCommand(Command cmd, Context ctx, Console console) {
     return;
   }
 
+  final wikipedia = Wikipedia(
+    lang.value as String,
+    "Dartpedia/1.0.0 (https://github.com/benexl/dartpedia)",
+  );
   print("Searching Wikipedia [${lang.value}] for: $query");
+  final result = await wikipedia.getSummary(query);
+  console.print(
+    Card([
+      Text(result.title, bold: true, inverse: true),
+      if (result.description != null)
+        Text(result.description!, italic: true, inverse: true),
+      Text(result.extract),
+    ]),
+  );
 }

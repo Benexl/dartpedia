@@ -1,5 +1,4 @@
 import 'package:arg_parse/arg_parse.dart';
-import 'utils/themes.dart';
 import 'package:console/console.dart';
 
 import 'command/cache.dart';
@@ -7,6 +6,7 @@ import 'command/download.dart';
 import 'command/help.dart';
 import 'command/history.dart';
 import 'command/search.dart';
+import 'utils/themes.dart';
 
 void run(List<String> arguments) {
   final console = Console(AppTheme.arcticPetrol.theme);
