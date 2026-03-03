@@ -24,16 +24,17 @@ This project is a Dart monorepo managed with [Melos](https://melos.invertase.dev
 1. Clone the repository.
 2. Run `melos bootstrap` to install dependencies and link packages.
 
-### Running the CLI
-You can run the CLI directly from the source:
-```bash
-dart apps/cli/bin/cli.dart search "Dart programming language"
-```
+### Installation
+You can install the CLI directly from source:
 
-Or install it globally:
+#### From Local Source
 ```bash
 dart pub global activate --source path apps/cli
-dartpedia search "Flutter"
+```
+
+#### From GitHub
+```bash
+dart pub global activate --source git https://github.com/benexl/dartpedia --git-path apps/cli
 ```
 
 ## Features

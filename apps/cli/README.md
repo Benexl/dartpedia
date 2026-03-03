@@ -10,9 +10,15 @@ The main command-line interface for browsing Wikipedia from your terminal.
 
 ## Installation
 
+### From Local Source
 Activate globally using `dart pub global activate`:
 ```bash
-dart pub global activate --source path apps/cli
+dart pub global activate --source path .
+```
+
+### From GitHub
+```bash
+dart pub global activate --source git https://github.com/benexl/dartpedia --git-path apps/cli
 ```
 
 ## Usage
