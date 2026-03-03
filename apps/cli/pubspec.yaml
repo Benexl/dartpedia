@@ -9,9 +9,12 @@ environment:
 # Add regular dependencies here.
 dependencies:
   path: ^1.9.0
-  arg_parse: ^1.0.0
-  console: ^1.0.0
-  wikipedia: ^1.0.0
+  arg_parse:
+    path: ../../packages/arg_parse
+  console:
+    path: ../../packages/console
+  wikipedia:
+    path: ../../packages/wikipedia
   yaml: ^3.1.3
   logging: ^1.3.0
 
