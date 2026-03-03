@@ -25,15 +25,15 @@ class Command extends Argument {
   @override
   String get help {
     final buffer = StringBuffer();
-
-    buffer.writeln(description);
+    buffer.writeln(
+      "Usage: $name${options.isNotEmpty ? " [OPTIONS]" : ""}${subCommands.isNotEmpty ? " COMMAND" : ""}${allowValues ? " [Args${allowMultiple ? "..." : ""}]" : ""}",
+    );
     if (options.isNotEmpty) {
       buffer.writeln("Options:");
       for (final option in options) {
-        buffer.writeln("  ${option.help}");
+        buffer.writeln("  ${option.name}: ${option.description}");
       }
     }
-
     if (subCommands.isNotEmpty) {
       buffer.writeln("Commands:");
       for (final subCommand in subCommands) {
