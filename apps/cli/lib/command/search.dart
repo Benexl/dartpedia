@@ -6,7 +6,7 @@ import 'package:wikipedia/wikipedia.dart';
 Future<void> searchCommand(Command cmd, Context ctx, Console console) async {
   FlagOption help = cmd.options[1] as FlagOption;
   if (help.value) {
-    console.print(Card([Text(cmd.help)]));
+    print(cmd.help);
     return;
   }
 

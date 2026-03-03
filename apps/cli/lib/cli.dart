@@ -4,8 +4,6 @@ import 'package:console/console.dart';
 import 'utils/config.dart';
 
 import 'command/cache.dart';
-import 'command/download.dart';
-import 'command/history.dart';
 import 'command/search.dart';
 import 'utils/themes.dart';
 
@@ -41,11 +39,9 @@ void run(List<String> arguments) {
           }
 
           if (version.value) {
-            console.print(
-              Card([Text("Dartpedia v1.0.0 Copyright © 2024 Benexl projects")]),
-            );
+            print("dartpedia v1.0.0 Copyright © 2024 Benexl projects");
           } else if (help.value) {
-            console.print(Card([Text(cmd.help)]));
+            print(cmd.help);
           }
         },
         options: [
@@ -62,6 +58,7 @@ void run(List<String> arguments) {
             "search",
             "Search for stuff on wikipedia",
             (cmd, ctx) => searchCommand(cmd, ctx, console),
+            allowMultiple: true,
             allowValues: true,
             options: [
               ValueOption(
@@ -89,37 +86,6 @@ void run(List<String> arguments) {
                 "List cached articles",
                 (cmd, ctx) => cacheListCommand(cmd, ctx, console),
               ),
-            ],
-          ),
-          Command(
-            "download",
-            "Download content from wikipedia",
-            (cmd, ctx) => downloadCommand(cmd, ctx, console),
-            allowValues: true,
-            options: [
-              ValueOption("output", "Output file path", abbr: "o"),
-              ValueOption(
-                "format",
-                "Output format (text, html, pdf)",
-                abbr: "f",
-                defaultValue: "text",
-              ),
-              FlagOption("help", "Show help information", abbr: "h"),
-            ],
-          ),
-          Command(
-            "history",
-            "Show command history",
-            (cmd, ctx) => historyCommand(cmd, ctx, console),
-            options: [
-              FlagOption("clear", "Clear the history", abbr: "c"),
-              ValueOption(
-                "limit",
-                "Number of entries to show",
-                abbr: "n",
-                defaultValue: "20",
-              ),
-              FlagOption("help", "Show help information", abbr: "h"),
             ],
           ),
         ],

@@ -6,7 +6,7 @@ import 'package:console/console.dart';
 Future<void> cacheCommand(Command cmd, Context ctx, Console console) async {
   FlagOption help = cmd.options[0] as FlagOption;
   if (help.value) {
-    console.print(Card([Text(cmd.help)]));
+    print(cmd.help);
     return;
   }
 }
