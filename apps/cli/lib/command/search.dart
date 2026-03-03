@@ -26,32 +26,38 @@ Future<void> searchCommand(Command cmd, Context ctx, Console console) async {
     "Dartpedia/1.0.0 (https://github.com/benexl/dartpedia)",
   );
   print("Searching Wikipedia [${lang.value}] for: $query");
-  final result = await wikipedia.getSummary(query);
-  await console.clearScreen();
-  console.print(
-    Card([
-      Text(
-        result.title,
-        bold: true,
-        inverse: true,
-        span: true,
-        align: Align.centre,
-      ),
-      if (result.description != null)
+  try {
+    final result = await wikipedia.getSummary(query);
+
+    await console.clearScreen();
+    console.print(
+      Card([
         Text(
-          result.description!,
-          italic: true,
+          result.title,
+          bold: true,
           inverse: true,
           span: true,
           align: Align.centre,
         ),
-      Text(
-        result.extract,
-        paddingRight: 2,
-        paddingLeft: 2,
-        span: true,
-        align: Align.right,
-      ),
-    ]),
-  );
+        if (result.description != null)
+          Text(
+            result.description!,
+            italic: true,
+            inverse: true,
+            span: true,
+            align: Align.centre,
+          ),
+        Text(
+          result.extract,
+          paddingRight: 2,
+          paddingLeft: 2,
+          span: true,
+          align: Align.right,
+        ),
+      ]),
+    );
+  } catch (e) {
+    console.print(Card([Text("Error: ${e.toString()}")]));
+    return;
+  }
 }
