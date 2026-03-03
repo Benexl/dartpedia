@@ -1,7 +1,7 @@
 import 'package:arg_parse/arg_parse.dart';
 import 'package:console/console.dart';
 
-void cacheCommand(Command cmd, Context ctx, Console console) {
+Future<void> cacheCommand(Command cmd, Context ctx, Console console) async {
   FlagOption help = cmd.options[0] as FlagOption;
   if (help.value) {
     console.print(Card([Text(cmd.help)]));
@@ -9,10 +9,10 @@ void cacheCommand(Command cmd, Context ctx, Console console) {
   }
 }
 
-void cacheClearCommand(Command cmd, Context ctx) {
+Future<void> cacheClearCommand(Command cmd, Context ctx) async {
   print("Clearing cache...");
 }
 
-void cacheListCommand(Command cmd, Context ctx) {
+Future<void> cacheListCommand(Command cmd, Context ctx) async {
   print("Listing cached articles...");
 }

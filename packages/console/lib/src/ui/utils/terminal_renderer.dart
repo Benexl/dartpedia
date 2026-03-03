@@ -1,7 +1,10 @@
 import '../../types/ansi.dart';
+import 'dart:io';
 import '../../types/colors.dart';
+import '../../types/alignment.dart';
 
 mixin TerminalRenderer {
+  static final _ansiRegex = RegExp(r'\x1b\[[0-?]*[ -/]*[@-~]');
   String applyForegroundColor(String text, Color color) {
     RGB rgb = color.toRGB();
     return _apply(Ansi.foregroundTrueColor, {
@@ -32,6 +35,10 @@ mixin TerminalRenderer {
     bool inverse = false,
     bool hidden = false,
     bool blink = false,
+    int paddingRight = 0,
+    int paddingLeft = 0,
+    Align align = Align.right,
+    bool span = false,
   }) {
     final prefix = StringBuffer();
     final suffix = StringBuffer();
@@ -50,14 +57,82 @@ mixin TerminalRenderer {
     if (inverse) wrap(Ansi.inverse);
     if (hidden) wrap(Ansi.hidden);
     if (blink) wrap(Ansi.blinking);
-
-    if (prefix.isEmpty) return text;
+    final String processedText = _applyPadding(
+      _foldText(
+        text,
+        width: stdout.terminalColumns - paddingLeft * 2 - paddingRight * 2,
+      ),
+      align,
+      span,
+      paddingRight: paddingRight,
+      paddingLeft: paddingLeft,
+    );
+    if (prefix.isEmpty) return processedText;
 
     return (StringBuffer()
           ..write(prefix)
-          ..write(text)
+          ..write(processedText)
           ..write(suffix))
         .toString();
+  }
+
+  String _foldText(String text, {int width = 80}) {
+    final lines = <String>[];
+    final words = text.split(' ');
+    String currentLine = '';
+
+    for (final word in words) {
+      if ((currentLine + word).length <= width) {
+        currentLine += (currentLine.isEmpty ? '' : ' ') + word;
+      } else {
+        lines.add(currentLine);
+        currentLine = word;
+      }
+    }
+    if (currentLine.isNotEmpty) {
+      lines.add(currentLine);
+    }
+    return lines.join('\n');
+  }
+
+  String _applyPadding(
+    String text,
+    Align align,
+    bool span, {
+    int paddingRight = 0,
+    int paddingLeft = 0,
+  }) {
+    if (paddingRight > 0) {
+      text = text
+          .split("\n")
+          .map((line) => line + (' ' * paddingRight))
+          .join('\n');
+    }
+    if (paddingLeft > 0) {
+      text = text
+          .split("\n")
+          .map((line) => (' ' * paddingLeft) + line)
+          .join('\n');
+    }
+    if (!span) return text;
+    return text
+        .split('\n')
+        .map((line) {
+          int width = stdout.terminalColumns;
+          int visibleLength = line.replaceAll(_ansiRegex, '').length;
+          int padding = width - visibleLength;
+          switch (align) {
+            case Align.right:
+              return line + (' ' * padding);
+            case Align.centre:
+              int leftPadding = padding ~/ 2;
+              int rightPadding = padding - leftPadding;
+              return (' ' * leftPadding) + line + (' ' * rightPadding);
+            case Align.left:
+              return (' ' * padding) + line;
+          }
+        })
+        .join('\n');
   }
 
   String _apply(Ansi ansi, Map<String, String> replacements) {

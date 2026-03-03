@@ -53,11 +53,11 @@ class ArgParse {
     _parsedArgs.add(currentCommand);
   }
 
-  void run() {
+  Future<void> run() async {
     for (int i = _parsedArgs.length - 1; i >= 0; i--) {
       var cmd = _parsedArgs[i];
       _context.hasSubcommand = (i - 1 > 0);
-      cmd.commandHandler(cmd, _context);
+      await cmd.commandHandler(cmd, _context);
     }
   }
 

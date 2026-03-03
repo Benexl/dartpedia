@@ -2,7 +2,7 @@ import 'package:arg_parse/arg_parse.dart';
 import 'package:console/console.dart';
 import 'package:wikipedia/wikipedia.dart';
 
-void searchCommand(Command cmd, Context ctx, Console console) async {
+Future<void> searchCommand(Command cmd, Context ctx, Console console) async {
   FlagOption help = cmd.options[1] as FlagOption;
   if (help.value) {
     console.print(Card([Text(cmd.help)]));
@@ -27,12 +27,31 @@ void searchCommand(Command cmd, Context ctx, Console console) async {
   );
   print("Searching Wikipedia [${lang.value}] for: $query");
   final result = await wikipedia.getSummary(query);
+  await console.clearScreen();
   console.print(
     Card([
-      Text(result.title, bold: true, inverse: true),
+      Text(
+        result.title,
+        bold: true,
+        inverse: true,
+        span: true,
+        align: Align.centre,
+      ),
       if (result.description != null)
-        Text(result.description!, italic: true, inverse: true),
-      Text(result.extract),
+        Text(
+          result.description!,
+          italic: true,
+          inverse: true,
+          span: true,
+          align: Align.centre,
+        ),
+      Text(
+        result.extract,
+        paddingRight: 2,
+        paddingLeft: 2,
+        span: true,
+        align: Align.right,
+      ),
     ]),
   );
 }

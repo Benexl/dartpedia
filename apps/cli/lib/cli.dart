@@ -9,14 +9,14 @@ import 'command/search.dart';
 import 'utils/themes.dart';
 
 void run(List<String> arguments) {
-  final console = Console(AppTheme.arcticPetrol.theme);
+  final console = Console(AppTheme.wikipediaClassic.theme);
   try {
     ArgParse parser = ArgParse(arguments);
     parser.parse(
       Command(
         "dartpedia",
         "Browse wikipedia from your terminal",
-        (Command cmd, Context ctx) {
+        (Command cmd, Context ctx) async {
           FlagOption version = cmd.options[0] as FlagOption;
           FlagOption help = cmd.options[1] as FlagOption;
 

@@ -1,4 +1,5 @@
 import 'colors.dart';
+import 'alignment.dart';
 
 class Style {
   final Color? background;
@@ -11,6 +12,11 @@ class Style {
   final bool? inverse;
   final bool? hidden;
   final bool? blink;
+  final bool? span;
+  final Align? align;
+  final int? paddingLeft;
+  final int? paddingRight;
+
   Style({
     this.background,
     this.foreground,
@@ -22,5 +28,9 @@ class Style {
     this.inverse,
     this.hidden,
     this.blink,
+    this.span,
+    this.align,
+    this.paddingLeft,
+    this.paddingRight,
   });
 }

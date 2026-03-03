@@ -10,4 +10,9 @@ class Console {
     stdout.write(widget.render(theme));
     stdout.flush();
   }
+
+  Future<void> clearScreen() async {
+    stdout.write('\x1B[2J\x1B[0;0H');
+    await stdout.flush();
+  }
 }

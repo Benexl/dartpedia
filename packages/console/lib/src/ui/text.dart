@@ -1,4 +1,5 @@
 import 'widget.dart';
+import '../types/alignment.dart';
 import '../types/colors.dart';
 import '../types/style.dart';
 import '../types/theme.dart';
@@ -17,6 +18,10 @@ class Text with TerminalRenderer implements Widget {
   final bool? inverse;
   final bool? hidden;
   final bool? blink;
+  final bool? span;
+  final Align? align;
+  final int? paddingRight;
+  final int? paddingLeft;
 
   @override
   final List<Widget>? children = null;
@@ -33,25 +38,33 @@ class Text with TerminalRenderer implements Widget {
     this.inverse,
     this.hidden,
     this.blink,
+    this.span,
+    this.align,
+    this.paddingRight,
+    this.paddingLeft,
   });
   @override
   String render(Theme theme, {Style? style}) {
-    return applyStyle(
-      applyBackgroundColor(
-        applyForegroundColor(
+    return applyBackgroundColor(
+      applyForegroundColor(
+        applyStyle(
           text,
-          foregroundColor ?? style?.foreground ?? theme.foreground,
+          bold: bold ?? style?.bold ?? false,
+          italic: italic ?? style?.italic ?? false,
+          underline: underline ?? style?.underline ?? false,
+          strikethrough: strikethrough ?? style?.strikethrough ?? false,
+          dim: dim ?? style?.dim ?? false,
+          inverse: inverse ?? style?.inverse ?? false,
+          hidden: hidden ?? style?.hidden ?? false,
+          blink: blink ?? style?.blink ?? false,
+          span: span ?? style?.span ?? false,
+          align: align ?? style?.align ?? Align.right,
+          paddingLeft: paddingLeft ?? style?.paddingLeft ?? 0,
+          paddingRight: paddingRight ?? style?.paddingRight ?? 0,
         ),
-        backgroundColor ?? style?.background ?? theme.background,
+        foregroundColor ?? style?.foreground ?? theme.foreground,
       ),
-      bold: bold ?? style?.bold ?? false,
-      italic: italic ?? style?.italic ?? false,
-      underline: underline ?? style?.underline ?? false,
-      strikethrough: strikethrough ?? style?.strikethrough ?? false,
-      dim: dim ?? style?.dim ?? false,
-      inverse: inverse ?? style?.inverse ?? false,
-      hidden: hidden ?? style?.hidden ?? false,
-      blink: blink ?? style?.blink ?? false,
+      backgroundColor ?? style?.background ?? theme.background,
     );
   }
 }

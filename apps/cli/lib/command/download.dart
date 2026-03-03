@@ -1,7 +1,7 @@
 import 'package:arg_parse/arg_parse.dart';
 import 'package:console/console.dart';
 
-void downloadCommand(Command cmd, Context ctx, Console console) {
+Future<void> downloadCommand(Command cmd, Context ctx, Console console) async {
   FlagOption help = cmd.options[2] as FlagOption;
   if (help.value) {
     console.print(Card([Text(cmd.help)]));

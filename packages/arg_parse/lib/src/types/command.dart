@@ -2,7 +2,7 @@ import 'option.dart';
 import 'context.dart';
 import 'argument.dart';
 
-typedef CommandHandler = void Function(Command cmd, Context context);
+typedef CommandHandler = Future<void> Function(Command cmd, Context context);
 
 class Command extends Argument {
   final bool allowValues;
