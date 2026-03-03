@@ -1,4 +1,5 @@
 import 'dart:collection';
+import '../utils/logging.dart';
 
 class Argument {
   final String name;
@@ -23,14 +24,23 @@ class Argument {
 
   Object get value {
     if (_values.isEmpty) {
+      logger.fine(
+        'No value provided for argument "$name". Using default value: $defaultValue',
+      );
       if (defaultValue != null) {
         addValue(defaultValue!);
         return _values.first;
       } else {
+        logger.severe(
+          'No value provided for argument "$name" and no default value set.',
+        );
         throw StateError('No value provided for argument "$name".');
       }
     }
     if (allowMultiple) {
+      logger.severe(
+        'Multiple values provided for argument "$name". Use values instead.',
+      );
       throw StateError(
         'Multiple values are allowed for this argument. Use values instead.',
       );
@@ -42,9 +52,15 @@ class Argument {
 
   void addValue(Object value) {
     if (!allowMultiple && _values.isNotEmpty) {
+      logger.severe(
+        'Multiple values provided for argument "$name". Only one value is allowed.',
+      );
       throw ArgumentError('Multiple values are not allowed for this argument.');
     }
     if (value.runtimeType != valueType) {
+      logger.severe(
+        'Value type ${value.runtimeType} does not match expected type $valueType for argument "$name".',
+      );
       throw ArgumentError(
         'Value type ${value.runtimeType} does not match expected type $valueType.',
       );

@@ -1,4 +1,5 @@
 import 'argument.dart';
+import '../utils/logging.dart';
 
 class Option extends Argument {
   Option(
@@ -21,8 +22,10 @@ class ValueOption extends Option {
     super.valueType = String,
   });
   @override
-  String get help =>
-      "$name${abbr != null ? ", $abbr" : ""} <$valueType${allowMultiple ? " ..." : ""}>: $description";
+  String get help {
+    logger.fine("Generating help for value option: $name");
+    return "$name${abbr != null ? ", $abbr" : ""} <$valueType${allowMultiple ? " ..." : ""}>: $description";
+  }
 }
 
 class FlagOption extends Option {
@@ -30,17 +33,24 @@ class FlagOption extends Option {
     : super(defaultValue: false, allowMultiple: false, valueType: bool);
 
   @override
-  String get help => "$name${abbr != null ? ", $abbr" : ""}: $description";
+  String get help {
+    logger.fine("Generating help for flag option: $name");
+    return "$name${abbr != null ? ", $abbr" : ""}: $description";
+  }
 
   @override
   bool get value => super.value as bool;
 
   @override
   void setValue(Object value) {
+    logger.severe(
+      'Invalid value for flag option "$name". Flag options can only be set to true. Use the set() method to set this flag.',
+    );
     throw ArgumentError('Flag options can only be set to true. use set');
   }
 
   void set() {
+    logger.fine("Setting flag option $name to true");
     addValue(true);
   }
 }

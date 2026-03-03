@@ -1,4 +1,5 @@
 import 'option.dart';
+import '../utils/logging.dart';
 import 'context.dart';
 import 'argument.dart';
 
@@ -24,6 +25,7 @@ class Command extends Argument {
 
   @override
   String get help {
+    logger.fine("Generating help for command: $name");
     final buffer = StringBuffer();
     buffer.writeln(
       "Usage: $name${options.isNotEmpty ? " [OPTIONS]" : ""}${subCommands.isNotEmpty ? " COMMAND" : ""}${allowValues ? " [Args${allowMultiple ? "..." : ""}]" : ""}",
@@ -47,6 +49,9 @@ class Command extends Argument {
   @override
   void addValue(Object value) {
     if (!allowValues) {
+      logger.severe(
+        'Values are not allowed for command "$name". This command does not accept any values.',
+      );
       throw ArgumentError("This command does not accept any values");
     }
     super.addValue(value);

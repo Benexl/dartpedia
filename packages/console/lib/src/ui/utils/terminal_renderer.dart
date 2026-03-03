@@ -1,4 +1,5 @@
 import '../../types/ansi.dart';
+import '../../utils/logging.dart';
 import 'dart:io';
 import '../../types/colors.dart';
 import '../../types/alignment.dart';
@@ -6,6 +7,7 @@ import '../../types/alignment.dart';
 mixin TerminalRenderer {
   static final _ansiRegex = RegExp(r'\x1b\[[0-?]*[ -/]*[@-~]');
   String applyForegroundColor(String text, Color color) {
+    logger.fine('Applying foreground color: $color to text: "$text"');
     RGB rgb = color.toRGB();
     return _apply(Ansi.foregroundTrueColor, {
       'r': rgb.r.toString(),
@@ -16,6 +18,7 @@ mixin TerminalRenderer {
   }
 
   String applyBackgroundColor(String text, Color color) {
+    logger.fine('Applying background color: $color to text: "$text"');
     RGB rgb = color.toRGB();
     return _apply(Ansi.backgroundTrueColor, {
       'r': rgb.r.toString(),
@@ -40,6 +43,9 @@ mixin TerminalRenderer {
     Align align = Align.right,
     bool span = false,
   }) {
+    logger.fine(
+      'Applying styles to text: "$text" with bold: $bold, italic: $italic, underline: $underline, strikethrough: $strikethrough, dim: $dim, inverse: $inverse, hidden: $hidden, blink: $blink, paddingRight: $paddingRight, paddingLeft: $paddingLeft, align: $align, span: $span',
+    );
     final prefix = StringBuffer();
     final suffix = StringBuffer();
 
@@ -47,6 +53,7 @@ mixin TerminalRenderer {
       final parts = ansi.code.split('{text}');
       prefix.write(parts[0]);
       suffix.write(parts[1]);
+      logger.fine('Applying style: $ansi to text: "$text"');
     }
 
     if (bold) wrap(Ansi.bold);
@@ -85,11 +92,12 @@ mixin TerminalRenderer {
       if ((currentLine + word).length <= width) {
         currentLine += (currentLine.isEmpty ? '' : ' ') + word;
       } else {
-        lines.add(currentLine);
+        logger.fine('Adding line: "$currentLine"');
         currentLine = word;
       }
     }
     if (currentLine.isNotEmpty) {
+      logger.fine('Adding final line: "$currentLine"');
       lines.add(currentLine);
     }
     return lines.join('\n');
@@ -102,19 +110,25 @@ mixin TerminalRenderer {
     int paddingRight = 0,
     int paddingLeft = 0,
   }) {
+    logger.fine(
+      'Applying padding to text: "$text" with align: $align, span: $span, paddingRight: $paddingRight, paddingLeft: $paddingLeft',
+    );
     if (paddingRight > 0) {
+      logger.fine('Applying right padding of $paddingRight spaces');
       text = text
           .split("\n")
           .map((line) => line + (' ' * paddingRight))
           .join('\n');
     }
     if (paddingLeft > 0) {
+      logger.fine('Applying left padding of $paddingLeft spaces');
       text = text
           .split("\n")
           .map((line) => (' ' * paddingLeft) + line)
           .join('\n');
     }
     if (!span) return text;
+    logger.fine('Applying alignment + span: $align to text: "$text"');
     return text
         .split('\n')
         .map((line) {
@@ -136,6 +150,7 @@ mixin TerminalRenderer {
   }
 
   String _apply(Ansi ansi, Map<String, String> replacements) {
+    logger.fine('Applying ANSI code: $ansi with replacements: $replacements');
     return ansi.code.replaceAllMapped(RegExp(r'\{(\w+)\}'), (m) {
       final key = m.group(1);
       return replacements[key] ?? m.group(0)!;

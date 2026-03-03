@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'utils/logging.dart';
 import 'types/wikipedia_result.dart';
 import 'dart:convert';
 
@@ -12,16 +13,21 @@ class Wikipedia {
   Wikipedia(this.language, this.userAgent);
 
   Future<WikipediaResult> getSummary(String title) async {
+    logger.info(
+      'Fetching Wikipedia summary for "$title" in language "$language"',
+    );
     final response = await http.get(
       Uri.parse('$url/$title'),
       headers: {'User-Agent': userAgent},
     );
 
     if (response.statusCode == 200) {
+      logger.info('Successfully fetched Wikipedia summary for "$title"');
       final json = jsonDecode(response.body) as Map<String, dynamic>;
       return WikipediaResult.fromJson(json);
     } else {
-      throw Exception('Failed to load Wikipedia summary');
+      logger.severe('Failed to fetch Wikipedia summary for "$title"');
+      throw Exception('Failed to load Wikipedia summary for "$title"');
     }
   }
 }

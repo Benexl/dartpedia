@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'logging.dart';
 
 String expandHome(String path) {
   if (path.startsWith('~')) {
@@ -7,6 +8,7 @@ String expandHome(String path) {
         : Platform.environment['HOME'];
     if (home == null) throw Exception('Home directory not found');
     // Replace '~/...' or just '~' with the home directory
+    logger.info('Expanding path "$path" to home directory "$home"');
     if (path == '~') return home;
     if (path.startsWith('~/')) return '$home${path.substring(1)}';
   }

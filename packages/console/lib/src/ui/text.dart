@@ -1,4 +1,5 @@
 import 'widget.dart';
+import '../utils/logging.dart';
 import '../types/alignment.dart';
 import '../types/colors.dart';
 import '../types/style.dart';
@@ -45,6 +46,7 @@ class Text with TerminalRenderer implements Widget {
   });
   @override
   String render(Theme theme, {Style? style}) {
+    logger.fine('Rendering Text: "$text" with style: $style and theme: $theme');
     return applyBackgroundColor(
       applyForegroundColor(
         applyStyle(
