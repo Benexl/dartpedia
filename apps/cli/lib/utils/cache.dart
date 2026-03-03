@@ -11,7 +11,7 @@ class Cache {
     if (cacheDirPath != null) {
       dir = Directory(expandHome(cacheDirPath!));
     } else {
-      dir = Directory(expandHome('~/.dartpedia_cache'));
+      dir = Directory(expandHome('~/.dartpedia/cache'));
     }
     if (!dir.existsSync()) {
       dir.createSync(recursive: true);

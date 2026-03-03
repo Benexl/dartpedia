@@ -1,6 +1,7 @@
 import 'package:arg_parse/arg_parse.dart';
 import 'dart:io';
 import 'package:console/console.dart';
+import 'utils/config.dart';
 
 import 'command/cache.dart';
 import 'command/download.dart';
@@ -15,21 +16,25 @@ void run(List<String> arguments) {
   final console = Console(AppTheme.wikipediaClassic.theme);
   try {
     ArgParse parser = ArgParse(arguments);
+    final config = Config().content;
     parser.parse(
       Command(
         "dartpedia",
         "Browse wikipedia from your terminal",
         (Command cmd, Context ctx) async {
-          ctx.obj = {};
+          ctx.obj = {"config": config};
           FlagOption version = cmd.options[0] as FlagOption;
           FlagOption help = cmd.options[1] as FlagOption;
           ValueOption themeOpt = cmd.options[2] as ValueOption;
-          if (themeOpt.values.isNotEmpty) {
-            if (themesAvailable.containsKey(themeOpt.value)) {
-              console.theme = themesAvailable[themeOpt.value]!.theme;
+          if (themeOpt.values.isNotEmpty || config["theme"] != null) {
+            final theme = themeOpt.values.isNotEmpty
+                ? themeOpt.value
+                : config["theme"];
+            if (themesAvailable.containsKey(theme)) {
+              console.theme = themesAvailable[theme]!.theme;
             } else {
               print(
-                "Invalid theme: ${themeOpt.value}. Available themes: ${themesAvailable.keys.join(", ")}",
+                "Invalid theme: $theme. Available themes: ${themesAvailable.keys.join(", ")}",
               );
               exit(1);
             }
