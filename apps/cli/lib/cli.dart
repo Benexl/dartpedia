@@ -1,4 +1,5 @@
 import 'package:arg_parse/arg_parse.dart';
+import 'dart:io';
 import 'package:console/console.dart';
 
 import 'command/cache.dart';
@@ -8,6 +9,9 @@ import 'command/search.dart';
 import 'utils/themes.dart';
 
 void run(List<String> arguments) {
+  final themesAvailable = {
+    for (var theme in AppTheme.values) theme.name: theme,
+  };
   final console = Console(AppTheme.wikipediaClassic.theme);
   try {
     ArgParse parser = ArgParse(arguments);
@@ -16,8 +20,20 @@ void run(List<String> arguments) {
         "dartpedia",
         "Browse wikipedia from your terminal",
         (Command cmd, Context ctx) async {
+          ctx.obj = {};
           FlagOption version = cmd.options[0] as FlagOption;
           FlagOption help = cmd.options[1] as FlagOption;
+          ValueOption themeOpt = cmd.options[2] as ValueOption;
+          if (themeOpt.values.isNotEmpty) {
+            if (themesAvailable.containsKey(themeOpt.value)) {
+              console.theme = themesAvailable[themeOpt.value]!.theme;
+            } else {
+              print(
+                "Invalid theme: ${themeOpt.value}. Available themes: ${themesAvailable.keys.join(", ")}",
+              );
+              exit(1);
+            }
+          }
 
           if (version.value) {
             console.print(
@@ -30,6 +46,11 @@ void run(List<String> arguments) {
         options: [
           FlagOption("version", "Show version information", abbr: "v"),
           FlagOption("help", "Show help information", abbr: "h"),
+          ValueOption(
+            "theme",
+            "Choose a theme for the console output",
+            abbr: "t",
+          ),
         ],
         subCommands: [
           Command(
@@ -53,8 +74,16 @@ void run(List<String> arguments) {
             (cmd, ctx) => cacheCommand(cmd, ctx, console),
             options: [FlagOption("help", "Show help information", abbr: "h")],
             subCommands: [
-              Command("clear", "Clear all cached content", cacheClearCommand),
-              Command("list", "List cached articles", cacheListCommand),
+              Command(
+                "clear",
+                "Clear all cached content",
+                (cmd, ctx) => cacheClearCommand(cmd, ctx, console),
+              ),
+              Command(
+                "list",
+                "List cached articles",
+                (cmd, ctx) => cacheListCommand(cmd, ctx, console),
+              ),
             ],
           ),
           Command(

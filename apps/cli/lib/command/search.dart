@@ -1,4 +1,5 @@
 import 'package:arg_parse/arg_parse.dart';
+import '../utils/cache.dart';
 import 'package:console/console.dart';
 import 'package:wikipedia/wikipedia.dart';
 
@@ -20,15 +21,22 @@ Future<void> searchCommand(Command cmd, Context ctx, Console console) async {
     );
     return;
   }
+  final cache = Cache();
 
-  final wikipedia = Wikipedia(
-    lang.value as String,
-    "Dartpedia/1.0.0 (https://github.com/benexl/dartpedia)",
-  );
   print("Searching Wikipedia [${lang.value}] for: $query");
   try {
-    final result = await wikipedia.getSummary(query);
-
+    final WikipediaResult result;
+    if (await cache.get("search_${lang.value}_$query")
+        case var wikipediaData?) {
+      result = WikipediaResult.fromJson(wikipediaData);
+    } else {
+      final wikipedia = Wikipedia(
+        lang.value as String,
+        "Dartpedia/1.0.0 (https://github.com/benexl/dartpedia)",
+      );
+      result = await wikipedia.getSummary(query);
+      await cache.save("search_${lang.value}_$query", result.toJson());
+    }
     await console.clearScreen();
     console.print(
       Card([
