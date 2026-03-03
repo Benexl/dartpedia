@@ -55,6 +55,30 @@ theme: wikipediaClassic
 language: en
 ```
 
+## Shell Completions
+
+Shell completion scripts for Bash, Zsh, and Fish are available in the `completions/` directory.
+
+### Bash
+Add this to your `~/.bashrc`:
+```bash
+source path/to/dartpedia/completions/dartpedia.bash
+```
+
+### Zsh
+Add the directory to your `$fpath` in `~/.zshrc`:
+```zsh
+fpath=(path/to/dartpedia/completions $fpath)
+autoload -U compinit
+compinit
+```
+
+### Fish
+Copy the completion file to your fish configuration:
+```fish
+cp path/to/dartpedia/completions/dartpedia.fish ~/.config/fish/completions/
+```
+
 ## Options
 - `-v, --version`: Show version information.
 - `-h, --help`: Show help.

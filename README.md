@@ -42,3 +42,4 @@ dart pub global activate --source git https://github.com/benexl/dartpedia --git-
 - **Cache:** Manage local cache of viewed articles.
 - **Themes:** Customizable console output themes.
 - **Configuration:** Persistent user settings stored in `~/.dartpedia/config.yaml`.
+- **Shell Completions:** Native completion scripts for Bash, Zsh, and Fish.
