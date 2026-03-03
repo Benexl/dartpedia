@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'atomic_writer.dart';
 
 import 'package:yaml/yaml.dart';
 
@@ -24,7 +25,7 @@ class Config {
     if (file.existsSync()) {
       content = loadYaml(file.readAsStringSync());
     } else {
-      file.writeAsStringSync(defaultConfig);
+      AtomicWriter(file.path).write(defaultConfig);
       content = loadYaml(defaultConfig);
     }
   }
