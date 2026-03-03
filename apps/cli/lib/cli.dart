@@ -3,7 +3,6 @@ import 'package:console/console.dart';
 
 import 'command/cache.dart';
 import 'command/download.dart';
-import 'command/help.dart';
 import 'command/history.dart';
 import 'command/search.dart';
 import 'utils/themes.dart';
@@ -26,14 +25,6 @@ void run(List<String> arguments) {
             );
           } else if (help.value) {
             console.print(Card([Text(cmd.help)]));
-          } else {
-            console.print(
-              Card([
-                Text("Dartpedia", bold: true),
-                Text("Browse Wikipedia from your terminal"),
-                Text("Run dartpedia --help for usage information"),
-              ]),
-            );
           }
         },
         options: [
@@ -55,12 +46,6 @@ void run(List<String> arguments) {
               ),
               FlagOption("help", "Show help information", abbr: "h"),
             ],
-          ),
-          Command(
-            "help",
-            "Get help / usage on any command",
-            (cmd, ctx) => helpCommand(cmd, ctx, console),
-            allowValues: true,
           ),
           Command(
             "cache",
